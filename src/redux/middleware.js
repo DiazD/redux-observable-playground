@@ -27,8 +27,8 @@ const startNextPhase = (dispatch, phase) => {
 const jobDispatchMiddleWare = (store) => (next) => (action) => {
   const { type } = action;
 
-  if (type === "JOB/START") {
-    const phase = phases[0];
+  if (type === "JOB/START" || type === "JOB/CONTINUE") {
+    const phase = phases[currentJob];
 
     // update current job
     updateCurrentJob(phase);
@@ -36,14 +36,6 @@ const jobDispatchMiddleWare = (store) => (next) => (action) => {
     // set next action in progress
     startNextPhase(store.dispatch, phase);
 
-  } else if (type === "JOB/CONTINUE") {
-    const phase = phases[currentJob];
-
-    // update current job
-    updateCurrentJob(phase);
-
-    // set next phase as in progress
-    startNextPhase(store.dispatch, phase)
   }
 
   next(action);
